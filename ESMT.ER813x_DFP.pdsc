@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<package schemaVersion="1.7.7" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="PACK.xsd">
+  <vendor>ESMT</vendor>
+  <!-- Pack download directory, hosted in the ESMT cmsis_pack GitHub repo (main branch). -->
+  <url>https://github.com/EliteSemiconductor/cmsis_pack/raw/refs/heads/main/</url>
+  <name>ER813x_DFP</name>
+  <description>ESMT ER813x Sub-1GHz ARM Cortex-M3 Device Family Support</description>
+  <supportContact>https://wlappl.esmt.com.tw/</supportContact>
+
+  <releases>
+    <release version="1.0.0" date="2026-06-14">
+      First release. Device ER8131P9: 512 KB XIP flash @0x00000000, 64 KB SRAM @0x20000000
+      (32 KB available at reset, upper 32 KB enabled by firmware). Flash programming
+      algorithm: ESMT_ER8131P9.FLM. Dvendor id "ESMT:190" is the official
+      Arm-registered ESMT vendor id.
+    </release>
+  </releases>
+
+  <keywords>
+    <keyword>ESMT</keyword>
+    <keyword>Device Support</keyword>
+    <keyword>Device Family Package ESMT</keyword>
+    <keyword>ER813x</keyword>
+    <keyword>ER8131P9</keyword>
+    <keyword>Sub-1GHz</keyword>
+  </keywords>
+
+  <!-- devices section (mandatory for Device Family Packs) -->
+  <devices>
+    <!-- "ESMT:190" is the official Arm-registered ESMT device vendor id
+         (Open-CMSIS-Pack PR #399, PACK.xsd v1.7.58 or later). Use the same id
+         across all ESMT Device Family Packs. -->
+    <family Dfamily="ER813x Sub-1GHz M3 Family" Dvendor="ESMT:190">
+      <!-- *************************  Subfamily 'ER813x'  ***************************** -->
+      <subFamily DsubFamily="ER813x">
+
+        <description>Low-power Sub-GHz Cortex-M3 wireless SoC family for IoT: 868/915 MHz GFSK/FSK/OOK to 1 Mbps, +16 dBm PA, NFC, HW crypto, ULP.</description>
+
+        <!-- Add future part numbers as sibling <device> entries here. The family
+             covers 256/512KB/1MB flash and QFN32/QFN40; a variant with a different
+             flash size needs its own <memory>/<algorithm>. -->
+
+        <!-- *************************  Device 'ER8131P9'  ***************************** -->
+        <!-- ER8131P9 = NFC variant, QFN40 (order code ER8131P9X33Q540). -->
+        <device Dname="ER8131P9">
+          <processor Dcore="Cortex-M3" Dclock="40000000" Dfpu="NO_FPU" Dmpu="NO_MPU" Ddsp="NO_DSP" Dendian="Little-endian"/>
+
+          <!-- XIP flash @ 0x00000000, 512 KB, 4 KB uniform sectors, 256-byte page -->
+          <memory    id="IROM1"  start="0x00000000"  size="0x00080000"  startup="1"  default="1"/>
+
+          <!-- SRAM low 32 KB: available at reset; default region for auto-generated scatter -->
+          <memory    id="IRAM1"  start="0x20000000"  size="0x00008000"  init="0"     default="1"/>
+          <!-- SRAM upper 32 KB: OPTIONAL - must be enabled by firmware before use (power-saving default off) -->
+          <memory    id="IRAM2"  start="0x20008000"  size="0x00008000"  init="0"     default="0"/>
+
+          <algorithm name="Flash/ESMT_ER8131P9.FLM"  start="0x00000000"  size="0x00080000"  RAMstart="0x20000000"  RAMsize="0x00002000"  default="1"/>
+
+          <!-- Features from ER813X datasheet rev 1.2 (2026-05-08); cosmetic
+               (Pack Installer device view) and non-breaking. -->
+          <feature type="WirelessOther"  name="Sub-GHz radio 868/915 MHz, up to +16 dBm, GFSK/FSK/OOK up to 1 Mbps"/>
+          <feature type="NFC"            name="NFC tag, ISO/IEC 14443-3 Type A (passive, EFUSE access)"/>
+          <feature type="Crypto"         name="AES-128/192/256, SHA-224/256, hardware PUF, 2-stage secure boot"/>
+          <feature type="RNG"            name="Hardware TRNG (PUF-based)"/>
+          <feature type="DMA"     n="8"               name="8-channel DMA"/>
+          <feature type="UART"    n="3"               name="UART, up to 460800 baud"/>
+          <feature type="SPI"     n="2"               name="QSPI (Quad SPI)"/>
+          <feature type="I2C"     n="2"               name="I2C master/slave, up to 1 Mbps"/>
+          <feature type="ADC"     n="1"   m="12"      name="SAR ADC, 12-bit, 1 Msps"/>
+          <feature type="IOs"     n="15"              name="GPIO, flexible peripheral mapping"/>
+          <feature type="PWM"     n="7"               name="PWM: 6 channels + 1 always-on"/>
+          <feature type="Timer"   n="3"   m="32"      name="32-bit timers"/>
+          <feature type="Timer"   n="3"   m="16"      name="16-bit timers"/>
+          <feature type="RTC"     n="1"               name="RTC calendar (year/month/day/h/m/s)"/>
+          <feature type="XTAL"    n="40000000"        name="40 MHz crystal"/>
+          <feature type="VCC"     n="1.8" m="3.6"     name="Supply voltage 1.8 V to 3.6 V"/>
+          <feature type="Temp"    n="-40" m="85"      name="Operating temperature -40 to 85 C"/>
+          <feature type="QFN"     n="40"              name="QFN40, 5 x 5 mm"/>
+        </device>
+
+      </subFamily>
+    </family>
+  </devices>
+
+</package>
